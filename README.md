@@ -46,10 +46,10 @@ the more, the more will be if sensors initialized in your memory.
 If you're using VS Code open each folder (server, sensor) in one new VSCode Windows and push F5. 
 
 
-![Test Image 2]("doc\docker_ps.png")
+![Test Image 2]("https://github.com/agneisilva/multiples-sensor-mqtt-mongo/blob/master/doc/docker_ps.png")
 
-![Test Image 2]("doc\mongoCompass.png")
+![Test Image 2]("https://github.com/agneisilva/multiples-sensor-mqtt-mongo/blob/master/doc/mongoCompass.png")
 
-![Test Image 2]("doc\server_saved_data.png")
+![Test Image 2]("https://github.com/agneisilva/multiples-sensor-mqtt-mongo/blob/master/doc/server_saved_data.png")
 
-![Test Image 2]("doc\started_5_sensor.png")
+![Test Image 2]("https://github.com/agneisilva/multiples-sensor-mqtt-mongo/blob/master/doc/started_5_sensor.png")
