@@ -16,6 +16,8 @@ docker ps -a
 
 MAKE SURE both mongodb and mosquitto service broker container are running before run server and sensor 
 
+![Docker PS](doc/docker_ps.png)
+
 ## Starting SERVER
 
 access server folder and run:
@@ -42,14 +44,10 @@ npm run 5
 where "5" is the number of sensor you want to  simulate. You can use any positive number you want.
 the more, the more will be if sensors initialized in your memory.
 
+![Started 5 sensor async](doc/started_5_sensor.png)
 
 If you're using VS Code open each folder (server, sensor) in one new VSCode Windows and push F5. 
 
-
-![Docker PS](doc/docker_ps.png)
-
-![Mongo Compass](doc/mongoCompass.png)
-
 ![Server saving data](doc/server_saved_data.png)
 
-![Started 5 sensor async](doc/started_5_sensor.png)
+![Mongo Compass](doc/mongoCompass.png)
