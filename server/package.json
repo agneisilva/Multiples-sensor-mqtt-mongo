@@ -1,0 +1,18 @@
+{
+  "name": "mqtt-mongo",
+  "version": "1.0.0",
+  "description": "mqtt to mongo",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "agnei",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^3.3.5",
+    "mongoose": "^5.7.14",
+    "mqtt": "^3.0.0",
+    "standard": "^14.3.1"
+  }
+}

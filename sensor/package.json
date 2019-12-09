@@ -1,0 +1,17 @@
+{
+  "name": "mqtt-mongo",
+  "version": "1.0.0",
+  "description": "mqtt to mongo",
+  "main": "simulateMultiplesSensor.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node simulateMultiplesSensor.js"
+  },
+  "author": "Agnei Silva",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.7.2",
+    "child_process": "^1.0.2",
+    "mqtt": "^3.0.0"
+  }
+}
