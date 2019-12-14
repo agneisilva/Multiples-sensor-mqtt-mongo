@@ -1,11 +1,9 @@
 const mqtt = require('mqtt')
 const guid = require('../crosscutting/guid.js')
-const { MongoClient } = require('mongodb');
+const mongoDb = require('./mongodb.js')
+const influxdb = require('./influxdb.js');
 
 
-const url = 'mongodb://localhost:27017/';
-const dbMongo = 'sensorDB';
-const sensorCollection = 'sensor';
 
 const options = {
   host: '127.0.0.1',
@@ -55,41 +53,12 @@ function handleSensorDisconnected(message) {
   console.log('Sensor disconnected, sensor id %s', message.toString())
 }
 
-function handleSensorSignal(playload) {
+async function handleSensorSignal(playload) {
   console.log('sensor signal received; Data: %s', playload.toString())
-  insertPlayloadToMongoDB(playload);
-}
-
-
-var insertPlayloadToMongoDB = async function (playload) {
-
-  await MongoClient.connect(url, function (err, db) {
-    if (err) throw err;
-
-    try {
-
-      let database = db.db(dbMongo);
-      const collection = database.collection(sensorCollection);
-
-      obj = JSON.parse(playload);
-
-      var data = { type: obj.type, date: obj.date, clientid: obj.clientId };
-
-      collection.insertOne(obj, function (err, res) {
-        if (err) throw err;
-        console.log("1 document inserted");
-        db.close();
-      });
-
-      console.log('Inserted 3 documents into the collection');
-
-    }
-    catch (err) {
-      console.log(err);
-    }
-
-
-    console.log("Connected successfully to server");
-
-  });
+  
+  //await Promise.all([
+    //mongoDb.insertPlayloadToMongoDB(playload);
+    influxdb.insertPlayloadToInfluxdb(playload);
+  // ]);
+  
 }
