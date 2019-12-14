@@ -16,7 +16,7 @@ docker run -it -d -p 1883:1883 -p 9001:9001  eclipse-mosquitto
 
 docker ps -a
 
-MAKE SURE both mongodb and mosquitto service broker container are running before run server and sensor 
+MAKE SURE both mongodb, influxdb and mosquitto service broker container are running before run server and sensor 
 
 ![Docker PS](doc/docker_ps.png)
 

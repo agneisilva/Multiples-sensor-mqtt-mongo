@@ -56,9 +56,9 @@ function handleSensorDisconnected(message) {
 async function handleSensorSignal(playload) {
   console.log('sensor signal received; Data: %s', playload.toString())
   
-  //await Promise.all([
-    //mongoDb.insertPlayloadToMongoDB(playload);
-    influxdb.insertPlayloadToInfluxdb(playload);
-  // ]);
+  await Promise.all([
+    mongoDb.insertPlayloadToMongoDB(playload),
+    influxdb.insertPlayloadToInfluxdb(playload)
+  ]);
   
 }
