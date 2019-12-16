@@ -13,8 +13,8 @@ const types_signal = {
 var clientId = guid.newGuid();
 
 const options = {
-    host: '127.0.0.1',
-    port: 1883,
+    host: process.env.mqtt_hostname || '127.0.0.1',
+    port: process.env.mqtt_port || 1883,
     keepalive: 60,
     clientId: clientId
     // username: "testing_user",
@@ -26,25 +26,25 @@ const options = {
 
 const client=mqtt.connect(options)
 
-console.log('STARTED:  Sensor number ' + clientId + '  started');
-
-var value = process.argv[2];
-process.stdout.write('Sensor ' + value + ' beginning.');
-
-process.stdout.write('STARTED:  Sensor number ' + clientId + '  started');
+//get params from parent process  
+// var value = process.argv[2];
+//write back to parent process
+// process.stdout.write('Sensor ' + value + ' beginning.');
 
 client.on('connect', () => {
     // Inform server that sensor is connected
     client.publish(topic_SENSORCONNECTED, clientId);
-    console.log('sensor signal connected sent');
+    console.log(`sensor id ${clientId} connected to hub`);
 })
 
 client.on("error", function (error) { console.log("Can't connect" + error) });
 
-// simulate opening garage door
+const timer = process.env.sensor_interval_signal || 2000;
+
+// simulate sensor sending data to server
 setInterval(() => {
     sendSensorSignal();
-}, 2000)
+}, timer)
 
 function sendSensorSignal() {
     if (client.connected) {
@@ -57,12 +57,12 @@ function sendSensorSignal() {
 
         client.publish(topic_SENSORSIGNAL, JSON.stringify(signal))
 
-        console.log('sensor signal sent ' + clientId);
+        console.log(`Sensor signal sent. Sensor id:  ${clientId}`);
     }
 }
 
 /**
- * Want to notify controller that garage is disconnected before shutting down
+ * Want to notify process that sensors is disconnected before process
  */
 function handleAppExit(options, err) {
     if (err) {
@@ -71,7 +71,7 @@ function handleAppExit(options, err) {
 
     if (options.cleanup) {
         client.publish(topic_SENSORDISCONNECTED, clientId)
-        console.log('sensor signal disconnected sent' + clientId);
+        console.log('Sensor signal disconnected sent. Sensor id: ' + clientId);
     }
 
     if (options.exit) {

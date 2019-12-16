@@ -2,12 +2,11 @@ const mqtt = require('mqtt')
 const guid = require('../crosscutting/guid.js')
 const mongoDb = require('./mongodb.js')
 const influxdb = require('./influxdb.js');
-
-
+const config = require('./config.js');
 
 const options = {
-  host: '127.0.0.1',
-  port: 1883,
+  host: config.mqtt_hostname || '127.0.0.1',
+  port: config.mqtt_port || 1883,
   keepalive: 60,
   clientId: "Server: " + guid.newGuid()
   // username: "testing_user",
@@ -16,6 +15,9 @@ const options = {
   // rejectUnauthorized: true,
   // ca: TRUSTED_CA_LIST
 };
+
+console.log('Option MQTT: ');
+console.log(JSON.stringify(options));
 
 const client = mqtt.connect(options)
 
@@ -60,5 +62,5 @@ async function handleSensorSignal(playload) {
     mongoDb.insertPlayloadToMongoDB(playload),
     influxdb.insertPlayloadToInfluxdb(playload)
   ]);
-  
+
 }

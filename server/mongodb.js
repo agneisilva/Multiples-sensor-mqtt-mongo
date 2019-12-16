@@ -1,8 +1,13 @@
 const { MongoClient } = require('mongodb');
+const config = require('./config.js');
 
-const url = 'mongodb://localhost:27017/';
-const dbMongo = 'sensorDB';
-const sensorCollection = 'sensor';
+const MONGO_HOSTNAME = config.mongo_hostname || 'localhost';
+const MONGO_PORT = config.mongo_port || 27017; 
+
+const MONGO_DB = 'sensorDB';
+const COLLECTION_SENSOR = 'sensors';
+
+const url = `mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
 
 var insertPlayloadToMongoDB = async function (playload) {
 
@@ -11,8 +16,8 @@ var insertPlayloadToMongoDB = async function (playload) {
 
         try {
 
-            let database = db.db(dbMongo);
-            const collection = database.collection(sensorCollection);
+            let database = db.db(MONGO_DB);
+            const collection = database.collection(COLLECTION_SENSOR);
 
             obj = JSON.parse(playload);
 

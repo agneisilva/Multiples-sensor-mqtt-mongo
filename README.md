@@ -64,3 +64,28 @@ You can use CymaticLabs.InfluxDB.Studio project to select data in influxdb
 Use Mongo Compass Comunity to select data in MongoDb 
 [InfluxDB Studio](https://www.mongodb.com/products/compass)
 ![Mongo Compass](doc/mongoCompass.png)
+
+
+
+
+Docker Commands:  
+
+cd .\server 
+docker build . -t server
+
+cd .\sensor 
+docker build . -t sensors
+
+
+docker-compose -f docker-compose.yml --no-ansi build --no-cache
+docker-compose -f docker-compose.yml up -d --no-build --force-recreate --remove-orphans
+docker-compose -f docker-compose.yml down
+
+netstat -a -b -n -o > ports_running.txt
+
+docker exec -it 333c8bb35283 bash
+docker exec -it 333c8bb35283 /bin/bash
+docker exec -it 333c8bb35283 /bin/sh
+
+docker logs --tail 50 --follow --timestamps 333c8bb35283
+docker-compose -f docker-compose.yml logs -f

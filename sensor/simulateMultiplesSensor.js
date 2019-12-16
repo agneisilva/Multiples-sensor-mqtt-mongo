@@ -26,9 +26,13 @@ function loadSensor(arg) {
 
 //execute with npm start [number of sensor] e.g "npm start 10" (it'll start 10 sensor). 
 //if  the parameter isn't passed it'll assume 10 sensor
-var numberSensor = (!!(process.argv[2])) ? +process.argv[2] : 3; 
+var numberSensorParamExec = +process.argv[2]
 
-console.log("numberSensor" + numberSensor);
+var numberSensorParamEnv = process.env.SENSORS_NUMBER
+
+var numberSensor = +(numberSensorParamExec || numberSensorParamEnv || 3);
+
+console.log("number of sensor: " + numberSensor);
 
 //https://stackoverflow.com/a/58682914
 var sensorExecution = Array(...Array(numberSensor)).map((_, i) => i);

@@ -1,36 +1,27 @@
 'use strict';
-
 const Influx = require('influxdb-nodejs');
+const config = require('./config.js');
 
-const client = new Influx('http://127.0.0.1:8086/sensors_db');
+
+const INFLUXDB_HOSTNAME = config.influxdb_hostname || 'localhost';
+const INFLUXDB_PORT = config.influxdb_port || 27017; 
+
+const INFLUXDB_DB = 'sensor_db';
+const SENSOR_TABLE = 'sensors_tb';
+
+const url = `http://${INFLUXDB_HOSTNAME}:${INFLUXDB_PORT}/${INFLUXDB_DB}`;
+
+const client = new Influx(url);
 
 client.startHealthCheck();
-
-// const fieldSchema = {
-//     use: 'integer',
-//     bytes: 'integer',
-//     url: 'string',
-// };
-
-// const tagSchema = {
-//     spdy: ['speedy', 'fast', 'slow'],
-//     method: '*',
-//     // http stats code: 10x, 20x, 30x, 40x, 50x
-//     type: ['1', '2', '3', '4', '5'],
-// };
-
-// client.schema('http', fieldSchema, tagSchema, {
-//     // default is false
-//     stripUnknown: true,
-// });
 
 var insertPlayloadToInfluxdb = async function (playload) {
     
     client.showDatabases()
     .then(names => {
 
-        if (!names.includes('sensors_db')) {
-            client.createDatabase("sensors_db")
+        if (!names.includes(INFLUXDB_DB)) {
+            client.createDatabase(INFLUXDB_DB)
                 .then(_ => {
                     console.info('create database success.  Databases: ' + JSON.stringify(names))
                 })
@@ -43,13 +34,10 @@ var insertPlayloadToInfluxdb = async function (playload) {
 
 var insert = (playload) =>  {
         //if(!!playload) return; 
-        console.log("insert Playload to Influxdb");
         
         var obj = JSON.parse(playload);
 
-        console.log(JSON.stringify(obj));
-
-        client.write('sensor_tb')
+        client.write(SENSOR_TABLE)
             .tag({
                 sensorId: obj.clientId,
             })
@@ -57,7 +45,7 @@ var insert = (playload) =>  {
                 type: obj.type, 
                 dateTime:  obj.date
             })
-            .then(() => console.info('write point to influxdb-relay success'))
+            .then(() => console.info('write point to influxdb success'))
             .catch(err => console.error(`write point to influxdb-relay fail, err:${err.message}`));
 }
 

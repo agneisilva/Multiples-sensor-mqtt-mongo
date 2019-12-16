@@ -1,30 +1,87 @@
 # Use root/example as user/password credentials
-version: '3.1'
+version: '3.7'
 
 services:
 
+  server:
+    image: server
+    container_name: server
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./server/Dockerfile
+    environment: 
+      
+      mqtt_hostname: mosquitto
+      mqtt_port: 1883
+      
+      mongo_hostname: mongo
+      mongo_port: 27017
+      
+      influxdb_hostname: influxdb
+      influxdb_port: 8086
+
+    depends_on: 
+      - mosquitto
+      - mongo
+      - influxdb
+    networks:
+      - bridge-network
+    # command: cd server && npm start
+
+
+  sensors:
+    image: sensors
+    container_name: sensors
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./sensor/Dockerfile
+    environment: 
+      mqtt_hostname: mosquitto
+      mqtt_port: 1883
+      sensor_interval_signal: 2000
+      SENSORS_NUMBER: 2
+    depends_on: 
+      - mosquitto
+      - mongo
+      - influxdb
+    networks:
+      - bridge-network
+    
+    # command: cd sensor && node simulateMultiplesSensor.js 2
+
   mosquitto:
-    image: eclipse-mosquitto
-    hostname: mosquitto
+    image: eclipse-mosquitto:latest
     container_name: mosquitto
-    expose:
-      - "1883"
-      - "9001"
+    restart: unless-stopped
     ports:
       - "1883:1883"
-      - "9001:9001"
-    volumes:
-      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
     networks:
-      - default
+      - bridge-network
 
   mongo:
-    image: mongo
-    restart: always
+    image: mongo:latest
+    restart: unless-stopped
+    container_name: mongo
     ports:
-      - 8081:8081
+      - 27017:27017
     environment:
-      AUTH: no
+      AUTH: 'no'
       #MONGO_INITDB_ROOT_USERNAME: root
       #MONGO_INITDB_ROOT_PASSWORD: example
-      
+    networks:
+      - bridge-network
+  
+  influxdb:    
+    image: influxdb:latest
+    container_name: influxdb
+    restart: unless-stopped
+    ports:
+      - 8086:8086
+    networks:
+      - bridge-network
+
+networks: 
+  bridge-network:
+    driver: bridge
