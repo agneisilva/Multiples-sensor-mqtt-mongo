@@ -76,7 +76,6 @@ docker build . -t server
 cd .\sensor 
 docker build . -t sensors
 
-
 docker-compose -f docker-compose.yml --no-ansi build --no-cache
 docker-compose -f docker-compose.yml up -d --no-build --force-recreate --remove-orphans
 docker-compose -f docker-compose.yml down
@@ -88,4 +87,5 @@ docker exec -it 333c8bb35283 /bin/bash
 docker exec -it 333c8bb35283 /bin/sh
 
 docker logs --tail 50 --follow --timestamps 333c8bb35283
-docker-compose -f docker-compose.yml logs -f
+
+docker-compose -f docker-compose.yml logs -f server sensors
